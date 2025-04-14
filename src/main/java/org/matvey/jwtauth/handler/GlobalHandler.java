@@ -29,7 +29,10 @@ public class GlobalHandler {
                 .body(errors);
     }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception e) {
-        return ResponseEntity.internalServerError().body(e.getMessage());
+    public ResponseEntity<Map<String, String>> handleException(Exception e) {
+        e.printStackTrace();
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }
 }
