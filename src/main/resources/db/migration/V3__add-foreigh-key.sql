@@ -1,3 +1,7 @@
-ALTER TABLE password_history DROP FOREIGH KEY password_history_ibfk_1;
-ALTER TABLE password_history ADD COLUMN user_id INT;
-ALTER TABLE password_history ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES users(id);
+CREATE TABLE password_history (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    oldPasswordHash VARCHAR(255),
+    newPasswordHash VARCHAR(255),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

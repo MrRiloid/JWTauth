@@ -8,6 +8,7 @@ import lombok.Data;
 @Table(name = "password_history")
 public class PasswordHistory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String oldPasswordHash;
     private String newPasswordHash;
