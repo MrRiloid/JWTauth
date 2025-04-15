@@ -9,5 +9,6 @@ CREATE TABLE password_history (
     id INT PRIMARY KEY AUTO_INCREMENT,
     old_password_hash VARCHAR(255),
     new_password_hash VARCHAR(255),
-    FOREIGN KEY (id) references users(id)
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

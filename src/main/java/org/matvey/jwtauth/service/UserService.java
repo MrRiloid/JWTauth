@@ -33,7 +33,7 @@ public class UserService {
         if (user.getRole() == null) {
             user.setRole(Role.ROLE_USER);
         }
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return saveUser(user);
     }
 

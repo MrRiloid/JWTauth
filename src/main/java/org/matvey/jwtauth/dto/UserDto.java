@@ -25,9 +25,9 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
-            message = "Password must contain at least one digit, lowercase, uppercase, and special character")
-    private String passwordHash;
+//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
+//            message = "Password must contain at least one digit, lowercase, uppercase, and special character")
+    private String password;
 
     private Role role;
 }

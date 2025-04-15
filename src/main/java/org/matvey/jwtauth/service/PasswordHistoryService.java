@@ -30,7 +30,7 @@ public class PasswordHistoryService {
     public PasswordHistory changePassword(Long userId, String currentPassword, String newPassword) {
         User user = userService.findByIdOrThrow(userId);
 
-        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
 
@@ -38,10 +38,10 @@ public class PasswordHistoryService {
 
         PasswordHistory passwordHistory = new PasswordHistory();
         passwordHistory.setUser(user);
-        passwordHistory.setOldPasswordHash(user.getPasswordHash());
+        passwordHistory.setOldPasswordHash(user.getPassword());
 
         String newPasswordHash = passwordEncoder.encode(newPassword);
-        user.setPasswordHash(newPasswordHash);
+        user.setPassword(newPasswordHash);
         userService.saveUser(user);
 
         passwordHistory.setNewPasswordHash(newPasswordHash);
@@ -57,7 +57,7 @@ public class PasswordHistoryService {
         List<PasswordHistory> passwordHistories =
                 passwordHistoryRepo.findByUserId(user.getId());
 
-        if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
             throw new RuntimeException("New password must be different from current password");
         }
 
