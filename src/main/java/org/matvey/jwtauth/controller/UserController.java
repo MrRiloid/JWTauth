@@ -6,6 +6,7 @@ import org.matvey.jwtauth.model.User;
 import org.matvey.jwtauth.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,13 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService, ModelMapper modelMapper, DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.dataSourceTransactionManagerAutoConfiguration = dataSourceTransactionManagerAutoConfiguration;
     }
 
     @GetMapping("/")
@@ -45,6 +48,7 @@ public class UserController {
     @PostMapping("/")
     public ResponseEntity<?> save(@Valid @RequestBody UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
+        System.out.println(user);
         User savedUser = userService.createUser(user);
         UserDto savedUserDto = modelMapper.map(savedUser, UserDto.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDto);

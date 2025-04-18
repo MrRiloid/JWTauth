@@ -1,24 +1,22 @@
 package org.matvey.jwtauth.service;
 
+import lombok.RequiredArgsConstructor;
 import org.matvey.jwtauth.enums.Role;
 import org.matvey.jwtauth.model.User;
 import org.matvey.jwtauth.repo.UserRepo;
+import org.matvey.jwtauth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public List<User> getUsers() {
         return userRepo.findAll();
@@ -26,6 +24,10 @@ public class UserService {
 
     public User getUserById(Long id) {
         return findByIdOrThrow(id);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     public User createUser(User user) {
