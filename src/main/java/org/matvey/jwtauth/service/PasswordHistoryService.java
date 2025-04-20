@@ -1,5 +1,6 @@
 package org.matvey.jwtauth.service;
 
+import lombok.RequiredArgsConstructor;
 import org.matvey.jwtauth.model.PasswordHistory;
 import org.matvey.jwtauth.model.User;
 import org.matvey.jwtauth.repo.PasswordHistoryRepo;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PasswordHistoryService {
     private final PasswordHistoryRepo passwordHistoryRepo;
     private final UserService userService;
@@ -19,20 +21,10 @@ public class PasswordHistoryService {
     @Value("${service.password.history.count}")
     private int passwordHistoryCount;
 
-    @Autowired
-    public PasswordHistoryService(PasswordHistoryRepo passwordHistoryRepo, UserService userService,
-                                  PasswordEncoder passwordEncoder) {
-        this.passwordHistoryRepo = passwordHistoryRepo;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     public PasswordHistory changePassword(Long userId, String currentPassword, String newPassword) {
         User user = userService.findByIdOrThrow(userId);
 
-        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-            throw new RuntimeException("Current password is incorrect");
-        }
+        matchPassword(currentPassword, user.getPassword());
 
         checkPasswordHistory(user, newPassword);
 
@@ -46,6 +38,13 @@ public class PasswordHistoryService {
 
         passwordHistory.setNewPasswordHash(newPasswordHash);
         return passwordHistoryRepo.save(passwordHistory);
+    }
+
+    public void matchPassword(String currentPassword, String userPassword) {
+        if (!passwordEncoder.matches(currentPassword, userPassword)) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
     }
 
     private PasswordHistory findByIdOrThrow(Long id) {

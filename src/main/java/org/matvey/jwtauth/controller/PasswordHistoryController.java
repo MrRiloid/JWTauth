@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/password")
-public class PasswordHistoryContoller {
+public class PasswordHistoryController {
     private final PasswordHistoryService passwordHistoryService;
 
     @Autowired
-    public PasswordHistoryContoller(PasswordHistoryService passwordHistoryService) {
+    public PasswordHistoryController(PasswordHistoryService passwordHistoryService) {
         this.passwordHistoryService = passwordHistoryService;
     }
 
